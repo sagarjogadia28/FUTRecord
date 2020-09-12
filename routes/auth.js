@@ -13,7 +13,7 @@ router.get('/google',
 // @path: /auth/google/redirect
 router.get('/google/redirect',
     passport.authenticate('google', {
-            successRedirect: '/profile/',
+            successRedirect: '/dashboard',
             failureRedirect: '/'
         }
     )

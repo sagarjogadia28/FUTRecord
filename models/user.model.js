@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const weekendSchema = require('./weekend')
+const weekendSchema = require('./weekend.model')
 
 const userSchema = new Schema({
     username: {type: String, required: true},
@@ -8,5 +8,5 @@ const userSchema = new Schema({
     weekends: [weekendSchema]
 })
 
-const User = mongoose.model('user', userSchema)
-module.exports = User
+const UserModel = mongoose.model('user', userSchema)
+module.exports = UserModel

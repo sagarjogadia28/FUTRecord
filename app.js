@@ -18,11 +18,6 @@ app.use(cookieSession({
 app.use(passport.initialize())
 app.use(passport.session())
 
-//Create HOME route
-app.get('/', (req, res) => {
-    res.sendFile('index.html', {root: __dirname})
-})
-
 //Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true})
 const db = mongoose.connection
@@ -33,5 +28,8 @@ db.once('open', () => console.log('Connected to Database'))
 app.listen(PORT, () => console.log(`Server has started on port : ${PORT}...`))
 
 //Routes
+app.use(express.json())
+app.use('/', require('./routes/home'))
 app.use('/auth', require('./routes/auth'))
-app.use('/profile', require('./routes/profile'))
+app.use('/weekends', require('./routes/weekends'))
+app.use('/matches', require('./routes/matches'))
