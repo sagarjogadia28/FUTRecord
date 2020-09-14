@@ -25,6 +25,9 @@ router.get('/:weekendNumber/:matchNumber', ensureAuth, async (req, res) => {
     console.log('GET: /matches/:weekendNumber/:matchNumber');
     try {
         const user = await User.findOne({googleID: req.user.googleID})
+        if (!user)
+            return res.status(400).json({msg: 'There is no user with this Google ID'})
+
         const weekend = user.weekends[req.params.weekendNumber]
         if (weekend === undefined)
             res.redirect('/weekends')
@@ -32,9 +35,10 @@ router.get('/:weekendNumber/:matchNumber', ensureAuth, async (req, res) => {
         if (match === undefined)
             res.redirect('/weekends')
         else
-            res.send(match)
+            res.json(match)
     } catch (err) {
         console.log(err)
+        res.status(500).send('Server Error')
     }
 })
 

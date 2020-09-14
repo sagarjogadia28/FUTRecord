@@ -3,10 +3,10 @@ require('./config/passport-setup')
 
 const express = require('express')
 const passport = require('passport')
-const mongoose = require('mongoose')
 const cookieSession = require('cookie-session')
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 5000
 const app = express()
+const connectDB = require('./db')
 
 //Encrypts the key and makes sure that it is day long, sends it to the browser
 app.use(cookieSession({
@@ -19,16 +19,15 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 //Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true})
-const db = mongoose.connection
-db.on('error', err => console.log(err))
-db.once('open', () => console.log('Connected to Database'))
+connectDB()
 
 //Start the server
 app.listen(PORT, () => console.log(`Server has started on port : ${PORT}...`))
 
+//Initialize Middleware
+app.use(express.json({extended: false}))
+
 //Routes
-app.use(express.json())
 app.use('/', require('./routes/home'))
 app.use('/auth', require('./routes/auth'))
 app.use('/weekends', require('./routes/weekends'))
